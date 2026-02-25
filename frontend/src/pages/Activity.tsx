@@ -18,7 +18,6 @@ const Activity = () => {
             return data;
         },
         enabled: !!currentRoom?.id,
-        refetchInterval: 10000, // Fallback poll every 10s if WS is down
     });
 
     if (!currentRoom) return null;
@@ -31,8 +30,8 @@ const Activity = () => {
         <button
             onClick={() => setActiveFilter(type)}
             className={`px-4 py-2 rounded-xl text-sm font-bold flex items-center space-x-2 transition-all ${activeFilter === type
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 scale-105'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900'
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 scale-105'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900'
                 }`}
         >
             {Icon && <Icon className="w-4 h-4" />}

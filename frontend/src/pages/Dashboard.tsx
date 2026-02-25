@@ -30,7 +30,6 @@ const Dashboard = () => {
             return data;
         },
         enabled: !!currentRoom?.id,
-        refetchInterval: 10000,
     });
 
     const { data: usageSummary } = useQuery<UsageSummaryEntry[]>({
@@ -66,6 +65,7 @@ const Dashboard = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['items'] });
+            queryClient.invalidateQueries({ queryKey: ['activity'] });
             setIsAddingItem(false);
             setNewItem({ name: '', total_quantity: 0, unit: 'pieces' });
         },
@@ -78,6 +78,7 @@ const Dashboard = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['items'] });
+            queryClient.invalidateQueries({ queryKey: ['activity'] });
             setItemToConsume(null);
         },
     });
@@ -88,6 +89,7 @@ const Dashboard = () => {
             return data;
         },
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['items'] });
             queryClient.invalidateQueries({ queryKey: ['activity'] });
             setIsLoggingChore(false);
         },
