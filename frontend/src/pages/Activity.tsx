@@ -57,7 +57,7 @@ const Activity = () => {
                                             <span className="font-bold">{activity.user_name}</span>{' '}
                                             {activity.activity_type === 'chore' ? (
                                                 <>
-                                                    completed <span className="text-purple-600 dark:text-purple-400 font-bold">{activity.chore_type}</span> on <span className="text-slate-500 dark:text-slate-400 font-normal">{new Date(activity.created_at).toLocaleDateString()}</span>
+                                                    completed <span className="text-purple-600 dark:text-purple-400 font-bold">{activity.chore_type}</span> on <span className="text-slate-500 dark:text-slate-400 font-normal">{new Date(activity.created_at).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}</span>
                                                 </>
                                             ) : (
                                                 <>
