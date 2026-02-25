@@ -42,7 +42,7 @@ API docs available at: http://localhost:8000/docs
 | `SECRET_KEY` | JWT signing key | `openssl rand -hex 32` |
 | `ALGORITHM` | JWT algorithm | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Token lifetime | `10080` (7 days) |
-| `CORS_ORIGINS` | Comma-separated allowed origins | `http://localhost:5173,https://myapp.vercel.app` |
+| `CORS_ORIGINS` | Comma-separated allowed origins (use `*` for all) | `*` |
 
 ## 🔄 Alembic Migrations
 

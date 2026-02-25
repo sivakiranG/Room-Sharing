@@ -30,7 +30,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS
+# CORS – pull allowed origins from settings (defaults to ['*'] so every
+# origin is permitted).  The environment variable CORS_ORIGINS can be
+# a comma-separated list or just "*" for wildcard.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
