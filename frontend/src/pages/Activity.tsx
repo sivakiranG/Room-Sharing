@@ -40,10 +40,10 @@ const Activity = () => {
                         {activities?.map((activity) => (
                             <div key={`${activity.activity_type}-${activity.id}`} className="p-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors flex items-start space-x-4">
                                 <div className={`p-3 rounded-2xl flex-shrink-0 ${activity.activity_type === 'refill'
-                                        ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600'
-                                        : activity.activity_type === 'chore'
-                                            ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600'
-                                            : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600'
+                                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600'
+                                    : activity.activity_type === 'chore'
+                                        ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600'
+                                        : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600'
                                     }`}>
                                     {activity.activity_type === 'chore' ? (
                                         <Sparkles className="w-5 h-5" />
@@ -57,7 +57,7 @@ const Activity = () => {
                                             <span className="font-bold">{activity.user_name}</span>{' '}
                                             {activity.activity_type === 'chore' ? (
                                                 <>
-                                                    completed <span className="text-purple-600 dark:text-purple-400 font-bold">{activity.chore_type}</span>
+                                                    completed <span className="text-purple-600 dark:text-purple-400 font-bold">{activity.chore_type}</span> on
                                                 </>
                                             ) : (
                                                 <>

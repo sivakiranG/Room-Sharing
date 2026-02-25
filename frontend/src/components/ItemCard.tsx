@@ -21,7 +21,10 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
 
     return (
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 relative overflow-hidden group hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start mb-4">
+            {/* Decorative background element - moved to top with pointer-events-none */}
+            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-2xl group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/20 transition-colors pointer-events-none -z-10" />
+
+            <div className="relative z-10 flex justify-between items-start mb-4">
                 <div>
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white capitalize">{item.name}</h3>
                     <p className="text-sm text-slate-500 font-medium">
@@ -42,8 +45,12 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
                     ) : null}
 
                     <button
-                        onClick={() => onDelete(item.id)}
-                        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Delete button clicked for:', item.id);
+                            onDelete(item.id);
+                        }}
+                        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all opacity-0 group-hover:opacity-100 relative z-20 cursor-pointer"
                         title="Delete Item"
                     >
                         <Trash2 className="w-4 h-4" />
@@ -51,7 +58,7 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
                 </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="relative z-10 space-y-4">
                 {/* Progress Bar */}
                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div
@@ -95,9 +102,6 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
                     </div>
                 </div>
             </div>
-
-            {/* Decorative background element */}
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-2xl group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/20 transition-colors -z-0" />
         </div>
     );
 };

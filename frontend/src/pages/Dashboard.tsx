@@ -88,6 +88,10 @@ const Dashboard = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['items'] });
         },
+        onError: (error: any) => {
+            console.error('Delete failed:', error);
+            alert('Failed to delete item. Please make sure the backend is updated and running.');
+        }
     });
 
     const copyInviteCode = () => {
@@ -115,7 +119,9 @@ const Dashboard = () => {
     };
 
     const handleDelete = (itemId: string) => {
-        if (confirm('Are you sure you want to delete this item? This cannot be undone.')) {
+        console.log('handleDelete triggered for:', itemId);
+        if (window.confirm('Are you sure you want to delete this item? This cannot be undone.')) {
+            console.log('Confirmed deletion for:', itemId);
             deleteItemMutation.mutate(itemId);
         }
     };
