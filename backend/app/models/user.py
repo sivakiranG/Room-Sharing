@@ -19,3 +19,4 @@ class User(Base):
     room_memberships = relationship("RoomMember", back_populates="user", cascade="all, delete-orphan")
     consumptions = relationship("Consumption", back_populates="user", cascade="all, delete-orphan", foreign_keys="Consumption.user_id")
     created_items = relationship("Item", back_populates="creator", foreign_keys="Item.created_by")
+    chores = relationship("Chore", back_populates="user", cascade="all, delete-orphan")

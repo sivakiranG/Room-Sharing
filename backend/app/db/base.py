@@ -5,3 +5,4 @@ from app.models.room import Room  # noqa: F401
 from app.models.room_member import RoomMember  # noqa: F401
 from app.models.item import Item  # noqa: F401
 from app.models.consumption import Consumption  # noqa: F401
+from app.models.chore import Chore  # noqa: F401

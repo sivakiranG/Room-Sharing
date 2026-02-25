@@ -7,6 +7,7 @@ from app.db.session import get_db
 from app.models.consumption import Consumption
 from app.models.item import Item
 from app.models.user import User
+from app.models.chore import Chore
 from app.models.room_member import RoomMember
 from app.schemas.schemas import ActivityEntry, UsageSummaryEntry
 from app.api.deps import require_room_member
@@ -46,6 +47,16 @@ async def get_activity(
     )
     items = items_result.scalars().all()
 
+    # Fetch chores
+    chores_result = await db.execute(
+        select(Chore)
+        .options(selectinload(Chore.user))
+        .where(Chore.room_id == room_id)
+        .order_by(Chore.created_at.desc())
+        .limit(limit)
+    )
+    chores = chores_result.scalars().all()
+
     # Map to ActivityEntry
     activities = []
     
@@ -71,6 +82,15 @@ async def get_activity(
             quantity=i.total_quantity,
             unit=i.unit,
             created_at=i.created_at,
+        ))
+
+    for ch in chores:
+        activities.append(ActivityEntry(
+            id=ch.id,
+            activity_type="chore",
+            user_name=ch.user.name,
+            chore_type=ch.chore_type,
+            created_at=ch.created_at,
         ))
 
     # Sort interleaved and limit

@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.db.session import engine
 from app.db.base import Base  # noqa – ensures all models are registered
-from app.api.v1 import auth, rooms, items, activity
+from app.api.v1 import auth, rooms, items, activity, chores
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -44,6 +44,7 @@ app.include_router(auth.router)
 app.include_router(rooms.router)
 app.include_router(items.router)
 app.include_router(activity.router)
+app.include_router(chores.router)
 
 
 @app.get("/health", tags=["Health"])

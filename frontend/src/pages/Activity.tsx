@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
 import { useRoomStore } from '../store/roomStore';
 import type { ActivityEntry } from '../types';
-import { Clock, Package, AlertCircle } from 'lucide-react';
+import { Clock, Package, AlertCircle, Sparkles } from 'lucide-react';
 
 const Activity = () => {
     const { currentRoom } = useRoomStore();
@@ -41,19 +41,33 @@ const Activity = () => {
                             <div key={`${activity.activity_type}-${activity.id}`} className="p-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors flex items-start space-x-4">
                                 <div className={`p-3 rounded-2xl flex-shrink-0 ${activity.activity_type === 'refill'
                                         ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600'
-                                        : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600'
+                                        : activity.activity_type === 'chore'
+                                            ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600'
+                                            : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600'
                                     }`}>
-                                    <Package className="w-5 h-5" />
+                                    {activity.activity_type === 'chore' ? (
+                                        <Sparkles className="w-5 h-5" />
+                                    ) : (
+                                        <Package className="w-5 h-5" />
+                                    )}
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex flex-col">
                                         <p className="text-slate-900 dark:text-white font-medium">
                                             <span className="font-bold">{activity.user_name}</span>{' '}
-                                            {activity.activity_type === 'refill' ? 'added/refilled' : 'consumed'}{' '}
-                                            <span className={`${activity.activity_type === 'refill' ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-600 dark:text-indigo-400'} font-bold`}>
-                                                {activity.quantity} {activity.unit}
-                                            </span>{' '}
-                                            of <span className="font-bold">{activity.item_name}</span>
+                                            {activity.activity_type === 'chore' ? (
+                                                <>
+                                                    completed <span className="text-purple-600 dark:text-purple-400 font-bold">{activity.chore_type}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {activity.activity_type === 'refill' ? 'added/refilled' : 'consumed'}{' '}
+                                                    <span className={`${activity.activity_type === 'refill' ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-600 dark:text-indigo-400'} font-bold`}>
+                                                        {activity.quantity} {activity.unit}
+                                                    </span>{' '}
+                                                    of <span className="font-bold">{activity.item_name}</span>
+                                                </>
+                                            )}
                                         </p>
 
                                         {activity.recorded_by_name && activity.recorded_by_name !== activity.user_name && (

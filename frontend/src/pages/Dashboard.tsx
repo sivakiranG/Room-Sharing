@@ -5,13 +5,15 @@ import { useRoomStore } from '../store/roomStore';
 import type { Item } from '../types';
 import ItemCard from '../components/ItemCard';
 import ConsumeModal from '../components/ConsumeModal';
-import { Plus, Check, Hash, DoorOpen, Loader2, RefreshCw, ShoppingCart, AlertTriangle } from 'lucide-react';
+import LogChoreModal from '../components/LogChoreModal';
+import { Plus, Check, Hash, DoorOpen, Loader2, RefreshCw, ShoppingCart, AlertTriangle, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
     const { currentRoom, setRoom, clearRoom } = useRoomStore();
     const queryClient = useQueryClient();
     const [isCopied, setIsCopied] = useState(false);
     const [isAddingItem, setIsAddingItem] = useState(false);
+    const [isLoggingChore, setIsLoggingChore] = useState(false);
     const [joinCode, setJoinCode] = useState('');
     const [newRoomName, setNewRoomName] = useState('');
     const [itemToConsume, setItemToConsume] = useState<Item | null>(null);
@@ -65,6 +67,17 @@ const Dashboard = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['items'] });
             setItemToConsume(null);
+        },
+    });
+
+    const logChoreMutation = useMutation({
+        mutationFn: async (chore_type: string) => {
+            const { data } = await api.post(`/rooms/${currentRoom?.id}/chores`, { chore_type });
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['activity'] });
+            setIsLoggingChore(false);
         },
     });
 
@@ -200,13 +213,22 @@ const Dashboard = () => {
                     <p className="text-slate-600 dark:text-slate-400 italic">Manage your shared groceries in real-time.</p>
                 </div>
 
-                <button
-                    onClick={() => setIsAddingItem(true)}
-                    className="bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 dark:hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-bold flex items-center shadow-lg transition-transform active:scale-95"
-                >
-                    <Plus className="w-5 h-5 mr-2" />
-                    Add New Item
-                </button>
+                <div className="flex space-x-3">
+                    <button
+                        onClick={() => setIsLoggingChore(true)}
+                        className="bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-6 py-3 rounded-2xl font-bold flex items-center shadow-sm transition-transform active:scale-95"
+                    >
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        Log Cleaning
+                    </button>
+                    <button
+                        onClick={() => setIsAddingItem(true)}
+                        className="bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 dark:hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-bold flex items-center shadow-lg transition-transform active:scale-95"
+                    >
+                        <Plus className="w-5 h-5 mr-2" />
+                        Add New Item
+                    </button>
+                </div>
             </div>
 
             {/* Items Grid */}
@@ -320,6 +342,15 @@ const Dashboard = () => {
                     onClose={() => setItemToConsume(null)}
                     onConsume={(itemId, quantity, userId) => consumeMutation.mutate({ itemId, quantity, userId })}
                     isPending={consumeMutation.isPending}
+                />
+            )}
+
+            {/* Log Chore Modal */}
+            {isLoggingChore && (
+                <LogChoreModal
+                    onClose={() => setIsLoggingChore(false)}
+                    onLogChore={(type) => logChoreMutation.mutate(type)}
+                    isPending={logChoreMutation.isPending}
                 />
             )}
         </div>

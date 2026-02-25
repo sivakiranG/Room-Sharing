@@ -33,12 +33,21 @@ export interface Item {
 
 export interface ActivityEntry {
     id: string;
-    activity_type: 'consumption' | 'refill';
+    activity_type: 'consumption' | 'refill' | 'chore';
     user_name: string;
     recorded_by_name?: string;
-    item_name: string;
-    quantity: number;
-    unit: string;
+    item_name?: string;
+    quantity?: number;
+    unit?: string;
+    chore_type?: string;
+    created_at: string;
+}
+
+export interface Chore {
+    id: string;
+    room_id: string;
+    user_id: string;
+    chore_type: string;
     created_at: string;
 }
 

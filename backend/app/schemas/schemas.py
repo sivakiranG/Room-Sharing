@@ -120,14 +120,19 @@ class ConsumptionOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class ChoreLogRequest(BaseModel):
+    chore_type: str
+
+
 class ActivityEntry(BaseModel):
     id: uuid.UUID
-    activity_type: str = "consumption"  # "consumption" or "refill"
-    user_name: str  # The person who consumed (for consumption) or added (for refill)
-    recorded_by_name: Optional[str] = None # The person who actually performed the action
-    item_name: str
-    quantity: float # Unified name for quantity_consumed or total_quantity
-    unit: str
+    activity_type: str = "consumption"  # "consumption", "refill", or "chore"
+    user_name: str  # Who did the action
+    recorded_by_name: Optional[str] = None
+    item_name: Optional[str] = None
+    quantity: Optional[float] = None
+    unit: Optional[str] = None
+    chore_type: Optional[str] = None
     created_at: datetime
 
     model_config = {"from_attributes": True}

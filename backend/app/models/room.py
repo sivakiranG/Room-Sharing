@@ -20,3 +20,4 @@ class Room(Base):
     # Relationships
     members = relationship("RoomMember", back_populates="room", cascade="all, delete-orphan")
     items = relationship("Item", back_populates="room", cascade="all, delete-orphan")
+    chores = relationship("Chore", back_populates="room", cascade="all, delete-orphan")
