@@ -6,7 +6,9 @@ import type { Item } from '../types';
 import ItemCard from '../components/ItemCard';
 import ConsumeModal from '../components/ConsumeModal';
 import LogChoreModal from '../components/LogChoreModal';
+import UsageSummaryModal from '../components/UsageSummaryModal';
 import { Plus, Check, Hash, DoorOpen, Loader2, RefreshCw, ShoppingCart, AlertTriangle, Sparkles } from 'lucide-react';
+import type { UsageSummaryEntry } from '../types';
 
 const Dashboard = () => {
     const { currentRoom, setRoom, clearRoom } = useRoomStore();
@@ -17,6 +19,7 @@ const Dashboard = () => {
     const [joinCode, setJoinCode] = useState('');
     const [newRoomName, setNewRoomName] = useState('');
     const [itemToConsume, setItemToConsume] = useState<Item | null>(null);
+    const [itemForSummary, setItemForSummary] = useState<Item | null>(null);
     const [newItem, setNewItem] = useState({ name: '', total_quantity: 0, unit: 'pieces' });
 
     // Queries
@@ -27,7 +30,16 @@ const Dashboard = () => {
             return data;
         },
         enabled: !!currentRoom?.id,
-        refetchInterval: 10000, // Still keep it fresh every 10s as a fallback
+        refetchInterval: 10000,
+    });
+
+    const { data: usageSummary } = useQuery<UsageSummaryEntry[]>({
+        queryKey: ['usage-summary', itemForSummary?.id],
+        queryFn: async () => {
+            const { data } = await api.get(`/items/${itemForSummary?.id}/usage-summary`);
+            return data;
+        },
+        enabled: !!itemForSummary?.id,
     });
 
     // Mutations
@@ -124,6 +136,10 @@ const Dashboard = () => {
             console.log('Confirmed deletion for:', itemId);
             deleteItemMutation.mutate(itemId);
         }
+    };
+
+    const handleSummary = (item: Item) => {
+        setItemForSummary(item);
     };
 
     // ── No Room View ───────────────────────────────────────────────────────────
@@ -284,6 +300,7 @@ const Dashboard = () => {
                             onConsume={handleConsume}
                             onRefill={handleRefill}
                             onDelete={handleDelete}
+                            onClick={handleSummary}
                         />
                     ))}
                     {items?.length === 0 && (
@@ -373,6 +390,15 @@ const Dashboard = () => {
                     onClose={() => setIsLoggingChore(false)}
                     onLogChore={(type) => logChoreMutation.mutate(type)}
                     isPending={logChoreMutation.isPending}
+                />
+            )}
+
+            {/* Usage Summary Modal */}
+            {itemForSummary && usageSummary && (
+                <UsageSummaryModal
+                    itemName={itemForSummary.name}
+                    summary={usageSummary}
+                    onClose={() => setItemForSummary(null)}
                 />
             )}
         </div>

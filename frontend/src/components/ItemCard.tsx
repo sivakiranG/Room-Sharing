@@ -12,15 +12,19 @@ interface ItemCardProps {
     onConsume: (itemId: string) => void;
     onRefill: (item: Item) => void;
     onDelete: (itemId: string) => void;
+    onClick: (item: Item) => void;
 }
 
-const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
+const ItemCard = ({ item, onConsume, onRefill, onDelete, onClick }: ItemCardProps) => {
     const percentage = (item.remaining_quantity / item.total_quantity) * 100;
     const isLowStock = percentage < 20 && item.remaining_quantity > 0;
     const isOutOfStock = item.remaining_quantity <= 0;
 
     return (
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 relative overflow-hidden group hover:shadow-md transition-shadow">
+        <div
+            onClick={() => onClick(item)}
+            className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 relative overflow-hidden group hover:shadow-md transition-shadow cursor-pointer"
+        >
             {/* Decorative background element - moved to top with pointer-events-none */}
             <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-2xl group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/20 transition-colors pointer-events-none -z-10" />
 
@@ -85,17 +89,17 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
                     <div className="flex space-x-2">
                         {(isLowStock || isOutOfStock) && (
                             <button
-                                onClick={() => onRefill(item)}
+                                onClick={(e) => { e.stopPropagation(); onRefill(item); }}
                                 title="Refill / Buy Again"
-                                className="p-3 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+                                className="p-3 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl shadow-lg shadow-amber-500/20 transition-all active:scale-95 relative z-20"
                             >
                                 <Plus className="w-5 h-5" />
                             </button>
                         )}
                         <button
-                            onClick={() => onConsume(item.id)}
+                            onClick={(e) => { e.stopPropagation(); onConsume(item.id); }}
                             disabled={isOutOfStock}
-                            className="p-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white rounded-2xl shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
+                            className="p-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white rounded-2xl shadow-lg shadow-indigo-600/20 transition-all active:scale-95 relative z-20"
                         >
                             <Minus className="w-5 h-5 font-bold" />
                         </button>
