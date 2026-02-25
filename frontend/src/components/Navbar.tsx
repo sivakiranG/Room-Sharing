@@ -1,12 +1,12 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useRoomStore } from '../store/roomStore';
-import { LayoutDashboard, History, PieChart, LogOut, Moon, Sun } from 'lucide-react';
+import { LayoutDashboard, History, PieChart, LogOut, Moon, Sun, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 const Navbar = () => {
     const { user, logout } = useAuthStore();
-    const { currentRoom, clearRoom } = useRoomStore();
+    const { currentRoom, clearRoom, setIsLoggingChore } = useRoomStore();
     const navigate = useNavigate();
     const location = useLocation();
     const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
@@ -40,7 +40,7 @@ const Navbar = () => {
                     <div className="flex items-center space-x-8">
                         <Link to="/dashboard" className="flex-shrink-0 flex items-center">
                             <span className="text-xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
-                                Grocery Tracker
+                                Bachelory Buddy
                             </span>
                         </Link>
 
@@ -67,6 +67,16 @@ const Navbar = () => {
                                 <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">Room</p>
                                 <p className="text-sm font-semibold text-slate-900 dark:text-white">{currentRoom.name}</p>
                             </div>
+                        )}
+
+                        {currentRoom && (
+                            <button
+                                onClick={() => setIsLoggingChore(true)}
+                                className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl font-bold hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all active:scale-95"
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                <span>Log Cleaning</span>
+                            </button>
                         )}
 
                         <button
