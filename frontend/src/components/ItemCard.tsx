@@ -32,7 +32,7 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete, onClick }: ItemCardProp
                 <div>
                     <h3 className="text-xl font-black text-slate-900 dark:text-white capitalize tracking-tight">{item.name}</h3>
                     <p className="text-base text-slate-500 font-bold">
-                        {item.remaining_quantity} / {item.total_quantity} <span className="text-sm font-medium uppercase">{item.unit}</span>
+                        {(item.total_quantity - item.remaining_quantity).toFixed(1).replace(/\.0$/, '')} / {item.total_quantity} <span className="text-sm font-medium uppercase">{item.unit}</span>
                     </p>
                 </div>
 
