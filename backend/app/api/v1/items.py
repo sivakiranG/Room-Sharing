@@ -111,3 +111,25 @@ async def consume_item(
     item = result.scalar_one()
 
     return item
+
+
+@router.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_item(
+    item_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    # Fetch item
+    result = await db.execute(select(Item).where(Item.id == item_id))
+    item = result.scalar_one_or_none()
+    
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+        
+    # Check if user is member of the room the item belongs to
+    from app.api.deps import require_room_member
+    await require_room_member(item.room_id, current_user, db)
+    
+    await db.delete(item)
+    await db.commit()
+    return None

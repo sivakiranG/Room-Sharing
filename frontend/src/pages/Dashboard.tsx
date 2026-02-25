@@ -81,6 +81,15 @@ const Dashboard = () => {
         },
     });
 
+    const deleteItemMutation = useMutation({
+        mutationFn: async (itemId: string) => {
+            await api.delete(`/items/${itemId}`);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['items'] });
+        },
+    });
+
     const copyInviteCode = () => {
         if (currentRoom?.invite_code) {
             navigator.clipboard.writeText(currentRoom.invite_code);
@@ -103,6 +112,12 @@ const Dashboard = () => {
             unit: item.unit,
         });
         setIsAddingItem(true);
+    };
+
+    const handleDelete = (itemId: string) => {
+        if (confirm('Are you sure you want to delete this item? This cannot be undone.')) {
+            deleteItemMutation.mutate(itemId);
+        }
     };
 
     // ── No Room View ───────────────────────────────────────────────────────────
@@ -262,6 +277,7 @@ const Dashboard = () => {
                             item={item}
                             onConsume={handleConsume}
                             onRefill={handleRefill}
+                            onDelete={handleDelete}
                         />
                     ))}
                     {items?.length === 0 && (

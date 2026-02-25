@@ -1,4 +1,4 @@
-import { Plus, Minus, AlertTriangle, User, Calendar } from 'lucide-react';
+import { Plus, Minus, AlertTriangle, User, Calendar, Trash2 } from 'lucide-react';
 import type { Item } from '../types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -11,9 +11,10 @@ interface ItemCardProps {
     item: Item;
     onConsume: (itemId: string) => void;
     onRefill: (item: Item) => void;
+    onDelete: (itemId: string) => void;
 }
 
-const ItemCard = ({ item, onConsume, onRefill }: ItemCardProps) => {
+const ItemCard = ({ item, onConsume, onRefill, onDelete }: ItemCardProps) => {
     const percentage = (item.remaining_quantity / item.total_quantity) * 100;
     const isLowStock = percentage < 20 && item.remaining_quantity > 0;
     const isOutOfStock = item.remaining_quantity <= 0;
@@ -28,16 +29,26 @@ const ItemCard = ({ item, onConsume, onRefill }: ItemCardProps) => {
                     </p>
                 </div>
 
-                {isOutOfStock ? (
-                    <span className="px-2.5 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold rounded-lg uppercase">
-                        Out of Stock
-                    </span>
-                ) : isLowStock ? (
-                    <span className="flex items-center px-2.5 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-lg uppercase">
-                        <AlertTriangle className="w-3 h-3 mr-1" />
-                        Low Stock
-                    </span>
-                ) : null}
+                <div className="flex items-center space-x-2">
+                    {isOutOfStock ? (
+                        <span className="px-2.5 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold rounded-lg uppercase">
+                            Out of Stock
+                        </span>
+                    ) : isLowStock ? (
+                        <span className="flex items-center px-2.5 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-lg uppercase">
+                            <AlertTriangle className="w-3 h-3 mr-1" />
+                            Low Stock
+                        </span>
+                    ) : null}
+
+                    <button
+                        onClick={() => onDelete(item.id)}
+                        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                        title="Delete Item"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
             <div className="space-y-4">
