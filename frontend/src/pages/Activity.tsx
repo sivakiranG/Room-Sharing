@@ -43,8 +43,8 @@ const Activity = () => {
         <div className="max-w-3xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Activity Feed</h1>
-                    <p className="text-slate-600 dark:text-slate-400 italic">See everything happening in your room.</p>
+                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Activity Feed</h1>
+                    <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">See everything happening in your room.</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">

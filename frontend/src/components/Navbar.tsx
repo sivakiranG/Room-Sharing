@@ -9,15 +9,21 @@ const Navbar = () => {
     const { currentRoom, clearRoom, setIsLoggingChore } = useRoomStore();
     const navigate = useNavigate();
     const location = useLocation();
-    const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
+    const [isDark, setIsDark] = useState(() => {
+        const saved = localStorage.getItem('theme');
+        if (saved) return saved === 'dark';
+        return document.documentElement.classList.contains('dark');
+    });
 
     const toggleDarkMode = () => {
-        if (isDark) {
-            document.documentElement.classList.remove('dark');
-            setIsDark(false);
-        } else {
+        const nextDark = !isDark;
+        setIsDark(nextDark);
+        if (nextDark) {
             document.documentElement.classList.add('dark');
-            setIsDark(true);
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
         }
     };
 
@@ -44,47 +50,47 @@ const Navbar = () => {
                             </span>
                         </Link>
 
-                        <div className="hidden sm:flex space-x-4">
+                        <div className="hidden sm:flex items-center space-x-2">
                             {navItems.map((item) => (
                                 <Link
                                     key={item.path}
                                     to={item.path}
-                                    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${location.pathname === item.path
+                                    className={`flex items-center px-4 py-2 rounded-xl text-sm font-bold transition-all ${location.pathname === item.path
                                         ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
-                                        : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'
+                                        : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
                                         }`}
                                 >
                                     <item.icon className="w-4 h-4 mr-2" />
                                     {item.name}
                                 </Link>
                             ))}
+
+                            {currentRoom && (
+                                <>
+                                    <button
+                                        onClick={() => setIsLoggingChore(true)}
+                                        className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-bold hover:bg-purple-700 shadow-lg shadow-purple-600/20 transition-all active:scale-95 ml-2"
+                                    >
+                                        <Sparkles className="w-4 h-4" />
+                                        <span>Log Cleaning</span>
+                                    </button>
+
+                                    <div className="hidden lg:flex flex-col items-start pl-6 ml-4 border-l border-slate-200 dark:border-slate-800">
+                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Active Room</p>
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white truncate max-w-[120px]">{currentRoom.name}</p>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        {currentRoom && (
-                            <div className="hidden md:block text-right mr-4">
-                                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">Room</p>
-                                <p className="text-sm font-semibold text-slate-900 dark:text-white">{currentRoom.name}</p>
-                            </div>
-                        )}
-
-                        {currentRoom && (
-                            <button
-                                onClick={() => setIsLoggingChore(true)}
-                                className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl font-bold hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all active:scale-95"
-                            >
-                                <Sparkles className="w-4 h-4" />
-                                <span>Log Cleaning</span>
-                            </button>
-                        )}
-
                         <button
                             onClick={toggleDarkMode}
-                            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400"
+                            className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all text-slate-600 dark:text-slate-400 shadow-sm"
                             aria-label="Toggle Dark Mode"
                         >
-                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                            {isDark ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-indigo-500" />}
                         </button>
 
                         <div className="flex items-center space-x-3 pl-4 border-l border-slate-200 dark:border-slate-800">

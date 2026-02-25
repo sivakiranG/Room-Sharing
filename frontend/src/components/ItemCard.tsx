@@ -30,9 +30,9 @@ const ItemCard = ({ item, onConsume, onRefill, onDelete, onClick }: ItemCardProp
 
             <div className="relative z-10 flex justify-between items-start mb-4">
                 <div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white capitalize">{item.name}</h3>
-                    <p className="text-sm text-slate-500 font-medium">
-                        {item.remaining_quantity} / {item.total_quantity} {item.unit}
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white capitalize tracking-tight">{item.name}</h3>
+                    <p className="text-base text-slate-500 font-bold">
+                        {item.remaining_quantity} / {item.total_quantity} <span className="text-sm font-medium uppercase">{item.unit}</span>
                     </p>
                 </div>
 

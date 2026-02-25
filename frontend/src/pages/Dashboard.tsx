@@ -233,13 +233,13 @@ const Dashboard = () => {
             </div>
 
             {/* Main Inventory Title */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pt-4">
                 <div>
-                    <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Inventory</h1>
-                    <p className="text-slate-600 dark:text-slate-400 italic">Manage your shared groceries in real-time.</p>
+                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Inventory</h1>
+                    <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">Manage your shared groceries in real-time.</p>
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex items-center space-x-4">
                     <button
                         onClick={() => setIsAddingItem(true)}
                         className="bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 dark:hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-bold flex items-center shadow-lg transition-transform active:scale-95"

@@ -30,8 +30,8 @@ const Summary = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-8">
             <div>
-                <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Consumption Summary</h1>
-                <p className="text-slate-600 dark:text-slate-400 italic">Historical breakdown of who used how much.</p>
+                <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Consumption Summary</h1>
+                <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">Historical breakdown of who used how much.</p>
             </div>
 
             {isLoading ? (
